@@ -22,16 +22,17 @@ const payload = {
 function UserModel(user) {
 
     var self = this;
-    self.email = user.email || '1';
-    self.firstname = user.firstname || '1';
-    self.lastname = user.lastname || '1';
-    self.password = user.password || '1';
-    self.gender = user.gender || '1';
-    self.date_of_birth = user.date_of_birth || '1';
-    self.height = user.height || '1';
-    self.genderpref = user.genderpref || '1';
-    self.ageminpref = user.ageminpref || '1';
-    self.agemaxpref = user.agemaxpref || '1';
+    self.email = user.email || null;
+    self.firstname = user.firstname || null;
+    self.lastname = user.lastname || null;
+    self.password = user.password || null;
+    self.gender = user.gender || null;
+    self.date_of_birth = user.date_of_birth || null;
+    self.zipcode = user.zipcode || null;
+    self.height = user.height || null;
+    self.genderpref = user.genderpref || null;
+    self.ageminpref = user.ageminpref || null;
+    self.agemaxpref = user.agemaxpref || null;
     self.race = user.race || null;
     self.religion = user.religion || null;
 }
