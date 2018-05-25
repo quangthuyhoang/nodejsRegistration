@@ -4,20 +4,17 @@ const   express = require('express'),
         expressValidator = require('express-validator'),
         Users = require('./database/models/Users'),
         bcrypt = require('bcrypt');
-const queryString = require('query-string');
+const queryString = require('query-string'),
+        multer = require('multer'),
+        path = require('path');
 
 const app = express();
+const upload = multer({ dest: 'uploads/'})
 const saltRounds = process.env.SALTROUNDS || 10;
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressValidator());
 // app.use(bodyParser.json());
-
-// db.connect((err) => {
-//     if(err) {
-//         console.log(err)
-//     }
-// });
 
 app.get('/', (req, res) => {
     var msg;
@@ -33,8 +30,7 @@ app.get('/', (req, res) => {
         msg = req.query.message;
     }
     // do stuff with mysql
-
-    res.end(msg)
+    res.sendFile(path.join(__dirname, 'index.html'))
 });
 
 
@@ -52,11 +48,6 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
     // validation
-    
-    // email
-    // correct length for each items
-
-    // password meets criteria
     
     // check dob is correct format
     req.checkBody('email')
@@ -107,10 +98,10 @@ app.post('/register', (req, res) => {
     
 
     if(errors) {
-        console.log("Errors:", errors)
+
         let msgArr = errors.map( el => el.msg )
         let errMsg = queryString.stringify({error: msgArr}, {arrayFormat: 'bracket'})
-        console.log(errMsg)
+     
         res.redirect('/?' + errMsg)
         // res.send(JSON.stringify(errors))
     } else {
@@ -142,8 +133,9 @@ app.post('/register', (req, res) => {
     }  
 });
 
-app.post('/uploadProfile', (req, res) => {
-    // upload profile picture
+// Profile Picture Post Route
+app.post('/uploadProfile', upload.single('profilePic'), (req, res, next) => {
+    res.redirect('/')
 })
 
 
