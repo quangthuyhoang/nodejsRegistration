@@ -20,10 +20,11 @@ const payload = {
 }
 
 function UserModel(user) {
+
     var self = this;
     self.email = user.email || '1';
-    self.firstName = user.firstName || '1';
-    self.lastName = user.lastName || '1';
+    self.firstname = user.firstname || '1';
+    self.lastname = user.lastname || '1';
     self.password = user.password || '1';
     self.gender = user.gender || '1';
     self.date_of_birth = user.date_of_birth || '1';
@@ -31,20 +32,17 @@ function UserModel(user) {
     self.genderpref = user.genderpref || '1';
     self.ageminpref = user.ageminpref || '1';
     self.agemaxpref = user.agemaxpref || '1';
-    // self.race = user.race || null;
-    // self.religion = user.religion || null;
+    self.race = user.race || null;
+    self.religion = user.religion || null;
 }
 
-// VALIDATION
 
-// add password
-UserModel.prototype.genHash = async function(props, value) {
+
+// VALIDATION
+// update password
+UserModel.prototype.updatePassword = function(value) {
     var self = this;
-    if(props === 'password') {
-        // update/add password
-        const hash = await bcrypt.hash(value, saltRounds)
-        self[props] = hash;
-    }
+    self['password'] = value;
 }
 
 // returns model values
@@ -56,20 +54,6 @@ UserModel.prototype.getValues = function(){
         vals.push(self[k])
     }
     return vals;
-}
-
-// email syntax
-UserModel.isValidEmail = function (email) {
-
-}
-// check character limit
-UserModel.isWithinLimit = function(props, limit) {
-
-}
-
-// check valid type
-UserModel.isCorrectType = function() {
-
 }
 
 // Create SQL commands here
