@@ -8,8 +8,8 @@ Registration API to handle registration function
 -MySQL
 
 ### User Stories:
-[x] Accept a POST request to path "/register"
-[x] Expect to receive data of a JSON object containing the following information of a user
+1. [x] Accept a POST request to path "/register"
+2. [x] Expect to receive data of a JSON object containing the following information of a user
 - Email,
 - First Name
 - Last Name
@@ -23,11 +23,11 @@ Registration API to handle registration function
 - Age Preference Max
 - Race (optional)
 - Religion (optional)
-[x] Securely hash the Password for storage
-[x] Allow user to upload a profile picture via path "/uploadProfile"
-[x] Enforce necessary data validation and proper errors should be returned
-[x] Return a success message if all validations are passed
-[x] Store information in a local database, preferably, MySQL
+3. [x] Securely hash the Password for storage
+4. [x] Allow user to upload a profile picture via path "/uploadProfile"
+5. [x] Enforce necessary data validation and proper errors should be returned
+6. [x] Return a success message if all validations are passed
+7. [x] Store information in a local database, preferably, MySQL
 Requirements
-[x] Accept input and return output in JSON
+8. [x] Accept input and return output in JSON
 
