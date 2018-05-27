@@ -31,3 +31,4 @@ Registration API to handle registration function
 Requirements
 8. [x] Accept input and return output in JSON
 
+Notes: Backend test was done using POSTMAN. mocha-chai, and some manual testing through web browser.

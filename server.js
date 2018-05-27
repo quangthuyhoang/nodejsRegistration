@@ -30,14 +30,13 @@ app.use(expressValidator());
 app.use(cookieParser());
 app.use(session(sessionOption));
 
-// INDEX ROUTE - FOR TESTING PURPOSES
+// INDEX ROUTE
 app.get('/', (req, res) => {
     var msg;
 
     if(req.query.errors) {
         msg = JSON.stringify({errors: req.query.errors});
     }
-
     if(req.query.message) { 
         msg = JSON.stringify({message: req.query.message});
     }
@@ -66,11 +65,10 @@ app.post('/register',
     // create User model
         var newUser = new Users(req.body)
 
-    // hash password
     bcrypt.hash( newUser.password, saltRounds, function(err, hash) {
    
         if(err) throw Error("Hash Error:", err)
-        newUser.updatePassword(hash); // replace password string with new hash
+        newUser.updatePassword(hash); 
     
     // Add new User to user table
         db.query(

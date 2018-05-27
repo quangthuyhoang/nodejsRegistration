@@ -1,7 +1,7 @@
-const expressValidator = require('express-validator');
-const querystring = require('querystring');
-const findUserByEmail = require('./crud').findUserByEmail,
-        _conf = require('../../config/constants');
+const   expressValidator    = require('express-validator'),
+        querystring         = require('querystring'),
+        findUserByEmail     = require('./crud').findUserByEmail,
+        _conf               = require('../../config/constants');
 
 
 const validation = {};
