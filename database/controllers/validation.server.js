@@ -1,20 +1,46 @@
 const expressValidator = require('express-validator');
-const queryString = require('query-string');
+const querystring = require('querystring');
+const findUserByEmail = require('./crud').findUserByEmail;
 
-module.exports = function(req, res, next) {
-        // check dob is correct format
+
+const validation = {};
+
+validation.isLoggedIn = function(req, res, next) {
+}
+
+// verify if Email already exist in database
+validation.AsyncEmailMiddleware = async function(req, res, next) {
+
+    // declare constants
+    const email = req.body.email;
+
+    try {
+        const checkEmail = await findUserByEmail(email);
+        req.emailExist = checkEmail.results === email;
+        // error handling
+    } catch(error) {
+        let errMsg = querystring.stringify({errors: JSON.stringify({param: 'error', message: "There has been an error querying the database."})});
+        return res.redirect('/register?' + errMsg);
+    }
+        // if exist then redirect and send msg
+    if(req.emailExist) {
+        let errMsg = querystring.stringify({errors: JSON.stringify({param: 'email', message: 'Email already exist in database.'})});
+        return res.redirect('/register?' + errMsg);
+    }
+    // if no errors or no emails found...
+    next()
+}
+
+// Verify User Input
+validation.checkInput = function(req, res, next) {
+
+        // check email
         req.checkBody('email')
         .notEmpty().withMessage('Email must be entered.')
         .isLength({max:90, min: 1}).withMessage("Email length must be between 1 and 80 characters.")
         .isEmail().withMessage('Must be a valid email')
         .trim()
         .normalizeEmail()
-    // verify if email already exists, unless i handle it while trying to add it
-        // .custom(value => {
-        //     // return findUserByEmail(value).then(user => {
-        //     //   throw new Error('this email is already in use');
-        //     // })
-        //   })
 
     // first name
     req.checkBody('firstname', 'First name must be between 1 to 25 characters').isLength({max: 25, min: 1})
@@ -54,7 +80,7 @@ module.exports = function(req, res, next) {
     // maximum age preference
     req.checkBody('agemaxpref').isNumeric().withMessage('Age preference must enter a number.')
     .isLength({min: 1, max: 5}).withMessage("Age preference must be between 1 and 5 characters");
-
+        
     // race
     if(req.body.race) {
         req.checkBody('race').isLength({max: 25}).withMessage('Race cannot exceed 25 characters');
@@ -64,17 +90,20 @@ module.exports = function(req, res, next) {
     if(req.body.religion) {
         req.checkBody('religion').isLength({max: 50}).withMessage('Religion cannot exceed 50 characters');
     }
-
-    const errors = req.validationErrors();
-    if(errors) {
-        let msgArr = errors.map( el => el.msg )
-        let errMsg = queryString.stringify({error: msgArr}, {arrayFormat: 'bracket'})
-     
-        return res.redirect('/?' + errMsg)
-    }
-  
-    return next();
-
-    // const errors = req.validationErrors();
     
+    const errors = req.validationErrors();
+        
+   
+    if(errors) {
+        let msgArr = errors.map( el => { 
+            return {param: el.param, message: el.msg}
+        } )
+        let errMsg = querystring.stringify({errors: JSON.stringify(msgArr)}, {arrayFormat: 'bracket'})
+       
+        return res.redirect('/register?' + errMsg)
+    }
+    
+    return next();
 }
+
+module.exports = validation;

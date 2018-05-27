@@ -4,10 +4,13 @@ const   express = require('express'),
         expressValidator = require('express-validator'),
         Users = require('./database/models/Users'),
         bcrypt = require('bcrypt');
-const queryString = require('query-string'),
+const queryString = require('querystring'),
         multer = require('multer'),
         path = require('path'),
-        validate = require('./database/controllers/validation.server');
+        validate = require('./database/controllers/validation.server').checkInput,
+        AsyncEmailMiddleware = require('./database/controllers/validation.server').AsyncEmailMiddleware,
+        session = require('express-session'),
+        cookieParser = require('cookie-parser');
 
 const app = express();
 const upload = multer({ dest: 'uploads/'})
@@ -15,73 +18,98 @@ const saltRounds = process.env.SALTROUNDS || 10;
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressValidator());
-// app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    key: 'user_sid',
+    secret: 'Pheramor_how_does_my_backend_code_look?',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: 60000
+    }
+}))
 
 app.get('/', (req, res) => {
     var msg;
-    console.log("query",req.query)
-    if(req.query.error) {
-        // errorMsg = queryString.parse(req.query.error , {arrayFormat: 'index'})
-        // errorMsg = req.query.error;
-        // console.log("/", errorMsg)
-        msg = JSON.stringify({errors: req.query.error})
+
+    if(req.query.errors) {
+        msg = JSON.stringify({errors: req.query.errors});
     }
-    // check message
+
     if(req.query.message) { 
-        msg = req.query.message;
+        msg = JSON.stringify({message: req.query.message});
     }
-    // do stuff with mysql
-    res.sendFile(path.join(__dirname, 'index.html'))
+    // res.sendFile(path.join(__dirname, 'index.html'));
+    res.send(msg)
 });
 
-
-
-
-const dbHandler = (err) => {
-    if(err) throw Error(err.stack);
-    console.log('connected as id ' + db.threadId);
-}
-
+// USER REGISTRATION - GET ROUTE
 app.get('/register', (req, res) => {
-    res.end("register page")
+    var msg;
+   
+    if(req.query.errors) {
+        msg = JSON.stringify({errors: req.query.errors})
+    }
+
+    res.send(msg);
 })
 
 
-app.post('/register', validate, (req, res) => {
+// USER REGISTRATION - POST ROUTE
+app.post('/register', validate, AsyncEmailMiddleware, (req, res) => {
+    
+    // handle
         var testUser = new Users(req.body)
 
-     // connect to sersver
-        db.connect(dbHandler);
-
     // hash password
-        bcrypt.hash( testUser.password, saltRounds, function(err, hash) {
-            if(err) throw Error("Hash Error:", err)
-            testUser.updatePassword(hash) // replace password string with new hash
+    bcrypt.hash( testUser.password, saltRounds, function(err, hash) {
 
-            db.query(testUser.insertQuery(), testUser.getValues(), (err, results, field) => {
+        if(err) throw Error("Hash Error:", err)
+        testUser.updatePassword(hash); // replace password string with new hash
 
-                // Error handling
-                if(err) {
-                    let errMsg = queryString.stringify({error: err})
-                    res.redirect('/?' + errMsg)
-                }
+        db.query(testUser.insertQuery(), testUser.getValues(), (err, results, field) => {
+      
+            // On Error
+            if(err) {
+                let errMsg = queryString.stringify({error: err});
+ 
+                res.redirect('/register?' + errMsg);
+            }
 
-                // On Success
+            // On Success
+            if(results) {
                 results.message = 'Registration Success!';
                 let payload = queryString.stringify(results);
+             
                 res.redirect('/?' + payload);
-            })
-        })   
-    // }  
+            }
+        })
+    }) 
 });
+
+// verify use is logged in
+app.use((req, res, next) => {
+    if(req.cookies.user_sid && !req.session.user) {
+        res.clearCookie('user_sid');
+    }
+    next();
+})
+
+const isLoggedIn = (req, res, next) => {
+    if(req.session.user && req.cookies.user_sid) {
+        res.redirect('/');
+    } else {
+        next();
+    }
+}
 
 // Profile Picture Post Route
 app.post('/uploadProfile', upload.single('profilePic'), (req, res, next) => {
-    res.redirect('/')
+    res.redirect('/');
 })
 
 
 const port =3000;
 app.listen(port, () => {
-    console.log("Server connected to port:", port)
+    console.log("Server connected to port:", port);
 });
