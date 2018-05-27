@@ -3,9 +3,9 @@
 Registration API to handle registration function
 
 #### Prerequests:
--NodeJS
--Express
--MySQL
+- NodeJS
+- Express
+- MySQL
 
 #### User Stories:
 1. [x] Accept a POST request to path "/register"
