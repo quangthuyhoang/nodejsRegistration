@@ -1,22 +1,5 @@
 const bcrypt = require('bcrypt');
 
-const saltRounds = process.env.SALTROUNDS || 10;
-
-// const payload = {
-//     email: "name@email.com", // var char
-//     firstName: '123', // varchar
-//     lastName: 'quang', //varchar
-//     password: '123', //varchar
-//     gender: 'male', //text
-//     dob: '1-30-1989', //varchar
-//     height: '5.2', //varchar
-//     genderPreference: 'female', //varchar 
-//     AgeMinPref: 25, //int
-//     AgeMaxPref: 35, //int
-//     Race: null, //option
-//     Religion: null //option
-// }
-
 function UserModel(user) {
 
     var self = this;
@@ -37,7 +20,7 @@ function UserModel(user) {
 
 
 
-// VALIDATION
+// Methods
 // update password
 UserModel.prototype.updatePassword = function(value) {
     var self = this;
