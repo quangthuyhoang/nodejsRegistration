@@ -1,13 +1,13 @@
-#User Registration NodeJS Project
-## Summary
+# User Registration NodeJS Project
+### Summary
 Registration API to handle registration function
 
-###Prerequests:
+#### Prerequests:
 -NodeJS
 -Express
 -MySQL
 
-### User Stories:
+#### User Stories:
 1. [x] Accept a POST request to path "/register"
 2. [x] Expect to receive data of a JSON object containing the following information of a user
 - Email,
