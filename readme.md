@@ -162,6 +162,40 @@ or
 }
 ```
 
+Example output errors:
+```
+{
+    "errors": {
+        "param": "email",
+        "message": "Email already exist in database."
+    }
+}
+{
+    "errors": [
+        {
+            "param": "email",
+            "message": "Must be a valid email"
+        },
+        {
+            "param": "ageminpref",
+            "message": "Max age preference must be greater than min age preference."
+        },
+        {
+            "param": "firstname",
+            "message": "name must be between 1 to 15 characters"
+        },
+        {
+            "param": "lastname",
+            "message": "name must be between 1 to 15 characters"
+        },
+        {
+            "param": "zipcode",
+            "message": "Zipcode must be between 5 to 10 characters long with format 77777 or 77777-0000"
+        },
+    ]
+}
+```
+
 ### Route Testing Manual Browser
 
 For the upload profile picture via /uploadProfile post route. I tested manually. You can also use test user registration via this method since I included a very simple form input.

@@ -48,8 +48,8 @@ app.get('/', (req, res) => {
 
 // USER REGISTRATION - GET ROUTE
 app.get('/register', (req, res) => {
+
     var msg;
-   
     if(req.query.errors) {
         msg = JSON.stringify({errors: JSON.parse(req.query.errors)})
     }
@@ -63,9 +63,8 @@ app.post('/register',
     validate, // input validation
     AsyncEmailMiddleware, // validate if email already exist in db
     (req, res) => {
-    // create User model
-    var newUser = new Users(req.body)
-
+        
+    var newUser = new Users(req.body) // create User model
     bcrypt.hash( newUser.password, saltRounds, function(err, hash) {
    
         if(err) throw Error('Hash Error:', err)
