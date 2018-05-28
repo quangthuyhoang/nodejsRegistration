@@ -124,7 +124,7 @@ Notes: Backend test was done using POSTMAN and some manual testing through web b
 
 ### Route Testing Via Postman
 
-If you have postman and your node server is up and running. Send all request to http://localhost:3000/ below:
+If you have postman and your node server is up and running. Send all request to http://localhost:3000/register below:
 
 
 #### /register
