@@ -18,8 +18,6 @@ function UserModel(user) {
     self.religion = user.religion || null;
 }
 
-
-
 // Methods
 // update password
 UserModel.prototype.updatePassword = function(value) {
@@ -42,10 +40,9 @@ UserModel.prototype.getValues = function(){
 
 // INSERT/CREATE
 UserModel.prototype.insertQuery = function(){
-    var rowStr = "?", columns, obj = Object.keys(this);
-
-    columns = obj.join(", ")
-    rowStr = rowStr + ", ?".repeat(obj.length - 1)
+    var rowStr = '?', columns, obj = Object.keys(this);
+    columns = obj.join(', ')
+    rowStr = rowStr + ', ?'.repeat(obj.length - 1)
  
     var sql = `INSERT INTO Users (${columns}) VALUES (${rowStr})`
     return sql

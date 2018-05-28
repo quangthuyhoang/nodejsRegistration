@@ -1,18 +1,18 @@
-const   express = require('express'),
-        bodyParser = require('body-parser'),
-        expressValidator = require('express-validator'),
-        Users = require('./database/models/Users'),
-        bcrypt = require('bcrypt'),
-        queryString = require('querystring'),
-        multer = require('multer'),
-        path = require('path'),
-        db = require('./database/mysqlDB'),
-        session = require('express-session'),
-        cookieParser = require('cookie-parser');
-const   validate = require('./database/controllers/validation.server').checkInput,
+const   express             = require('express'),
+        bodyParser          = require('body-parser'),
+        expressValidator    = require('express-validator'),
+        Users               = require('./database/models/Users'),
+        bcrypt              = require('bcrypt'),
+        queryString         = require('querystring'),
+        multer              = require('multer'),
+        path                = require('path'),
+        db                  = require('./database/mysqlDB'),
+        session             = require('express-session'),
+        cookieParser        = require('cookie-parser');
+const   validate            = require('./database/controllers/validation.server').checkInput,
         AsyncEmailMiddleware = require('./database/controllers/validation.server').AsyncEmailMiddleware,
         isLoggedInMiddleWare = require('./database/controllers/validation.server').isLoggedIn,
-        sessionOption = require('./database/session/option');
+        sessionOption       = require('./database/session/option');
         
 
 require('dotenv').config();
@@ -23,7 +23,7 @@ const upload = multer({ dest: 'uploads/'})
 const saltRounds = Number(process.env.SALTROUNDS);
 
 // SETUP 
-app.set("view engine", 'ejs'); // testing purposes only
+app.set('view engine', 'ejs'); // testing purposes only
 app.use('/public', express.static(process.cwd() + '/public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressValidator());
@@ -32,8 +32,8 @@ app.use(session(sessionOption));
 
 // INDEX ROUTE
 app.get('/', (req, res) => {
-    var msg;
 
+    var msg;
     if(req.query.errors) {
         msg = JSON.stringify({errors: req.query.errors});
     }
@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
     }
 
     res.send(msg)
+    // console.log(msg)
     // res.render('index', {msg: msg}) //--> testing purporses only
 });
 
@@ -63,11 +64,11 @@ app.post('/register',
     AsyncEmailMiddleware, // validate if email already exist in db
     (req, res) => {
     // create User model
-        var newUser = new Users(req.body)
+    var newUser = new Users(req.body)
 
     bcrypt.hash( newUser.password, saltRounds, function(err, hash) {
    
-        if(err) throw Error("Hash Error:", err)
+        if(err) throw Error('Hash Error:', err)
         newUser.updatePassword(hash); 
     
     // Add new User to user table
@@ -87,7 +88,6 @@ app.post('/register',
                 req.session.useremail = newUser.email;
                 results.message = 'Registration Success!';
                 let payload = queryString.stringify(results);
-             
                 res.redirect('/?' + payload);
             }
         })
@@ -106,5 +106,5 @@ app.post('/uploadProfile',
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-    console.log("Server connected to port:", port);
+    console.log('Server connected to port:', port);
 });

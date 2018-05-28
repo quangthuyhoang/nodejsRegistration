@@ -7,7 +7,7 @@
     "test": "mocha",
     "start": "node server.js"
   },
-  "author": "",
+  "author": "Quang-Thuy Hoang",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^2.0.1",

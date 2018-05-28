@@ -8,9 +8,7 @@ const validation = {};
 
 // verify if user is currently logged in
 validation.isLoggedIn = async function(req, res, next) {
-    
     if(!req.cookies.user_sid || !req.session.useremail) {
-
         return res.send(_conf.errorMessages.notLoggedIn);
     }
 
@@ -24,8 +22,10 @@ validation.isLoggedIn = async function(req, res, next) {
 
         let errMsg = querystring.stringify({
             errors: JSON.stringify({
-                param: 'error', message: _conf.errorMessages.dbQueryError})
+                param: 'error',
+                message: _conf.errorMessages.dbQueryError})
             });
+
         return res.redirect('/register?' + errMsg);
     };
 
@@ -39,7 +39,6 @@ validation.isLoggedIn = async function(req, res, next) {
 // verify if Email already exist in database
 validation.AsyncEmailMiddleware = async function(req, res, next) {
     
-    // declare constants
     const email = req.body.email;
 
     try {
@@ -90,7 +89,7 @@ validation.checkInput = function(req, res, next) {
     .isLength(_conf.name.char_limit)
 
     // password
-    const pwregx = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])")
+    const pwregx = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])')
     req.checkBody('password')
         .matches(pwregx).withMessage(_conf.password.message)
         .isLength(_conf.password.char_limit)
@@ -112,7 +111,7 @@ validation.checkInput = function(req, res, next) {
         .withMessage('Height must be a number')
         .isLength(_conf.height.char_limit)
         .withMessage(_conf.height.char_limit_message); 
-        // if input is entered as 5' 11" string then invoke
+        // if input is entered as 5' 11' string then invoke
         // conversion function to decimal number before storing into sql db.
 
     // date of birth - assumes a standard input of MM/DD/YYY format,
@@ -130,7 +129,7 @@ validation.checkInput = function(req, res, next) {
         .isNumeric()
         .withMessage('Age preference must be a number.')
         .isInt({lt: req.body.agemaxpref})
-        .withMessage("Max age preference must be greater than min age preference.")
+        .withMessage('Max age preference must be greater than min age preference.')
         .isLength(_conf.agepref.char_limit)
         .withMessage(_conf.agepref.char_limit_message);
     
@@ -139,7 +138,7 @@ validation.checkInput = function(req, res, next) {
         .isNumeric()
         .withMessage('Age preference must enter a number.')
         .isInt({gt: req.body.ageminpref})
-        .withMessage("Max age preference must be greater than min age preference.")
+        .withMessage('Max age preference must be greater than min age preference.')
         .isLength(_conf.agepref.char_limit)
         .withMessage(_conf.agepref.char_limit_message)
 
@@ -161,7 +160,10 @@ validation.checkInput = function(req, res, next) {
    
     if(errors) {
         let msgArr = errors.map( el => { 
-            return {param: el.param, message: el.msg}
+            return {
+                param: el.param,
+                message: el.msg
+            }
         } )
         let errMsg = querystring.stringify(
             {errors: JSON.stringify(msgArr)},

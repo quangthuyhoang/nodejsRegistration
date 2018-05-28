@@ -6,7 +6,7 @@ module.exports = {
         return new Promise( (resolve, reject) => {
   
             db.query(
-                "SELECT * FROM users WHERE email = ?",
+                'SELECT * FROM users WHERE email = ?',
                 [email],
                 function(err, results, fields)
                 {

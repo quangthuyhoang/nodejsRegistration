@@ -2,7 +2,7 @@ var validations = {};
 
 validations.errorMessages = {
     notLoggedIn: 'You are not logged in',
-    dbQueryError: "There has been an error querying the database.",
+    dbQueryError: 'There has been an error querying the database.',
     emailExist: 'Email already exist in database.',
 }
 
@@ -12,7 +12,7 @@ validations.email = {
         min: 1
     },
     notEmptyMessage: 'Email must be entered',
-    char_limit_message: "Email length must be between 1 and 90 characters.",
+    char_limit_message: 'Email length must be between 1 and 90 characters.',
     invalid_message: 'Must be a valid email',
 }
 
@@ -79,7 +79,7 @@ validations.religion = {
     char_limit: {
         max: 50,
     },
-    char_limit_message: `Religion cannot exceed 50 characters`,
+    char_limit_message: 'Religion cannot exceed 50 characters',
 }
 
 

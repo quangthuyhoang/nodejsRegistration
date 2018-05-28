@@ -5,7 +5,7 @@
 // const User = require('../database/models/Users');
 
 // var testUser = { 
-//     email: "name@email.com", // var char
+//     email: 'name@email.com', // var char
 //     firstName: '123', // varchar
 //     lastName: 'quang',
 //     password: '123', //varchar
@@ -24,14 +24,14 @@
 // newUser.genHash('password', '123')
 
 // var sqlStr = newUser.insertQuery(Object.keys(newUser));
-// var compareSqlStr = `INSERT INTO Users (${Object.keys(testUser).join(", ")}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+// var compareSqlStr = `INSERT INTO Users (${Object.keys(testUser).join(', ')}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 // const vals = newUser.getValues();
 // // console.log('vals', vals)
 // const compareVals = Object.values(testUser);
 // // console.log('compvals', compareVals, vals)
 // for(let i = 0; i < vals.length; i++) {
 //     if(compareVals[i] !== vals[i]) {
-//         console.log("NO MATCH",compareVals[i], vals[i])
+//         console.log('NO MATCH',compareVals[i], vals[i])
 //     }
 // }
 // describe('User Model', function() {
